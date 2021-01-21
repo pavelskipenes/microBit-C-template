@@ -108,7 +108,7 @@ static void recover_bus_from_halt()
 
 	TIMER1->STOP = 1;
 
-	twi_init();
+	microbit_twi_init();
 }
 
 static uint8_t twi_read_with_watchdog(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_read, uint8_t * data_buffer)

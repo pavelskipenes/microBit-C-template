@@ -38,7 +38,7 @@ static uint8_t get_required_width(char radix_format, int32_t number)
 
 static void print_number(void (*put_func)(uint8_t), char radix_format, int32_t number)
 {
-	if (number == 0) {
+	if(number == 0) {
 		put_func('0');
 		return;
 	}
@@ -87,7 +87,7 @@ static void print_number(void (*put_func)(uint8_t), char radix_format, int32_t n
 	}
 }
 
-void print_format(void (*put_func)(uint8_t), const char *format_string, ...)
+void microbit_print_format(void (*put_func)(uint8_t), const char *format_string, ...)
 {
 	va_list p_arg;
 	va_start(p_arg, format_string);

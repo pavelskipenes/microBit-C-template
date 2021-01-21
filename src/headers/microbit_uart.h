@@ -20,7 +20,7 @@ void microbit_uart_send(uint8_t byte);
  * 
  * @param const char* 
  */
-void microbit_uart_send_message(const char* message);
+void microbit_uart_send_message(const char *message);
 
 /**
  * @brief Attempts to receive a single byte over UART.

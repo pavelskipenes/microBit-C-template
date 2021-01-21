@@ -12,7 +12,6 @@
  */
 void microbit_twi_init();
 
-
 /**
  * @brief Read @p registers_to_read number of registers
  * from a slave with address @p slave_address, starting
@@ -27,12 +26,7 @@ void microbit_twi_init();
  * @warning @p data_buffer must be at least of size
  * @p registers_to_read to ensure safe operation.
  */
-void microbit_twi_read(
-    uint8_t slave_address,
-    uint8_t start_register,
-    uint8_t registers_to_read,
-    uint8_t * data_buffer
-);
+void microbit_twi_read(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_read, uint8_t * data_buffer);
 
 /**
  * @brief Write @p registers_to_write number of bytes
@@ -48,9 +42,4 @@ void microbit_twi_read(
  * @warning @p data_buffer must be at least of size
  * @p registers_to_write to ensure safe operation.
  */
-void microbit_twi_write(
-    uint8_t slave_address,
-    uint8_t start_register,
-    uint8_t registers_to_write,
-    uint8_t * data_buffer
-);
+void microbit_twi_write(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_write, uint8_t * data_buffer);

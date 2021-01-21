@@ -35,6 +35,4 @@
  * @param ... A variable list of numbers, equal in length to the
  * number of injected '%'s in @p format_string.
  */
-void print_format(void (*put_func)(uint8_t), const char * format_string, ...);
-
-#endif
+void microbit_print_format(void (*put_func)(uint8_t), const char *format_string, ...);
