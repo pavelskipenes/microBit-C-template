@@ -46,54 +46,54 @@ LDFLAGS := --specs=nosys.specs -Wl,--gc-sections -T $(LINKER_SCRIPT)
 
 # Rule 1. Create a build directory
 $(BUILD_DIR) :
-	$(QUIET)mkdir -p $@
+	$(QUIET) mkdir -p $@
 
 
 # Rule 2. Generate pre-main magic code.
 $(VENDOR_OBJECTS) : $(VENDOR_SOURCE)
-	$(QUIET)$(CC) $(CFLAGS) -I$(SYSTEM_BASE) -c $< -o $@
+	$(QUIET) $(CC) $(CFLAGS) -I$(SYSTEM_BASE) -c $< -o $@
 
 
 # Rule 3. Generate object file out of users c -files
 $(OBJ_FILES) : $(SRC_FILES) $(BUILD_DIR) $(VENDOR_OBJECTS)
-	$(QUIET)$(CC) $(CFLAGS) -c $< -o $@
+	$(QUIET) $(CC) $(CFLAGS) -c $< -o $@
 
 
 # Rule 4. link object files together
 $(BUILD_DIR)output.elf : $(OBJ_FILES) $(VENDOR_OBJECTS)
-	$(QUIET)$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+	$(QUIET) $(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 
 # Rule 5. convert binary into hex file
 .PHONY: compile
 $(BUILD_DIR)output.hex : $(BUILD_DIR)output.elf
-	$(QUIET)$(OBJCOPY) -O ihex $(BUILD_DIR)output.elf $@
+	$(QUIET) $(OBJCOPY) -O ihex $(BUILD_DIR)output.elf $@
 
 
 # Rule 6. upload binary
 .PHONY: flash
 flash : $(BUILD_DIR)output.hex
-	$(QUIET)nrfjprog -f nrf51 --chiperase --program $<
-	$(QUIET)nrfjprog -f nrf51 --reset
+	$(QUIET) nrfjprog -f nrf51 --chiperase --program $<
+	$(QUIET) nrfjprog -f nrf51 --reset
 
 
 # Rule 7. clear content on the chip
 .PHONY: erase
 erase :
-	$(QUIET)nrfjprog -f nrf51 --eraseall
+	$(QUIET) nrfjprog -f nrf51 --eraseall
 
 
 # Rule 8. Clean repository for build files.
 .PHONY: clean
 clean :
-	$(QUIET)rm -rf $(BUILD_DIR)
+	$(QUIET) rm -rf $(BUILD_DIR)
 
 
 # Formating rules
 .PHONY: format
 format: $(SRC_FILES) $(HEADER_FILES)
-	$(QUITE) indent --linux-style --line-length0 $< -o $@
-
+	$(QUIET) indent --linux-style --line-length0 $(SRC_FILES) $(HEADER_FILES)
+	$(QUIET) rm -rf $(SOURCE_DIR)*.c~ $(HEADERS_DIR)*.h~
 
 
 # Help rule

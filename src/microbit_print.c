@@ -38,7 +38,7 @@ static uint8_t get_required_width(char radix_format, int32_t number)
 
 static void print_number(void (*put_func)(uint8_t), char radix_format, int32_t number)
 {
-	if(number == 0) {
+	if (number == 0) {
 		put_func('0');
 		return;
 	}
