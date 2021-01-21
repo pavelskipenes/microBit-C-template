@@ -9,7 +9,7 @@ HEADERS_DIR := $(SOURCE_DIR)headers
 SRC_FILES := $(foreach sdir,$(SOURCE_DIR),$(wildcard $(sdir)*.c)) # for each item in SOURCE_DIR that ends with .c save to SRC_FILES
 OBJ_FILES = $(subst $(SOURCE_DIR),$(BUILD_DIR),$(SRC_FILES:.c=.o)) # for each item in SRC_FILES replace .c with .o and save to OBJ_FILES
 HEADER_FILES = $(foreach sdir,$(SOURCE_DIR)$(HEADERS_DIR),$(wildcard $(sdir)*.h)) # for each item in SOURCE_DIR/HEADERS_DIR that ends with .h save to HEADER_FILES
-
+TARGET = /dev/ttyACM0
 
 ifdef DEBUG
 .DEFAULT_GOAL := debug
@@ -96,13 +96,18 @@ format: $(SRC_FILES) $(HEADER_FILES)
 	$(QUIET) rm -rf $(SOURCE_DIR)*.c~ $(HEADERS_DIR)*.h~
 
 
+.PHONY: connect
+connect:
+	$(QUIET) picocom $(TARGET)
+
+
 # Help rule
 .PHONY: help
 help:
 	@echo "Available rules:"
 	@echo "make build: compile all sources (default goal)"
 	@echo "make format: format all source code"
-	@echo "make connect: connect picocom monitor to target (not implemented)"
+	@echo "make connect: connect picocom monitor to target"
 	@echo "make gdb: connect gdb to target (not implemented)" 
 	@echo "make clean: clean the repository for compiled files"
 	@echo "make erase: erase the target"
