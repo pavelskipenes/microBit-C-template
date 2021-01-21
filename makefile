@@ -116,7 +116,6 @@ help:
 	@echo "make build: compile all sources (default goal)"
 	@echo "make format: format all source code"
 	@echo "make connect: connect picocom monitor to target"
-	@echo "make gdb: connect gdb to target (not implemented)" 
 	@echo "make clean: clean the repository for compiled files"
 	@echo "make erase: erase the target"
 
