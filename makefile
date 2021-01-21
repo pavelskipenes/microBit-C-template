@@ -2,14 +2,42 @@
 #DEBUG := "Epstein didn't kill himself"
 
 # Options
-#QUIET := @ # supress echo from rules
+QUIET := @ # supress echo from rules
 TARGET = /dev/ttyACM0
+CC := arm-none-eabi-gcc
+OBJCOPY := arm-none-eabi-objcopy
+
+# User source options
 SOURCE_DIR := src/
 BUILD_DIR := build/
 HEADERS_DIR := $(SOURCE_DIR)headers/
-SRC_FILES := $(foreach sdir,$(SOURCE_DIR),$(wildcard $(sdir)*.c)) # for each item in SOURCE_DIR that ends with .c save to SRC_FILES
-OBJ_FILES = $(subst $(SOURCE_DIR),$(BUILD_DIR),$(SRC_FILES:.c=.o)) # for each item in SRC_FILES replace .c with .o and save to OBJ_FILES
-HEADER_FILES = $(foreach sdir,$(HEADERS_DIR),$(wildcard $(sdir)*.h)) # for each item in SOURCE_DIR/HEADERS_DIR that ends with .h save to HEADER_FILES
+
+# Vendor options
+BUILD_SYSTEM := vendor/build_system/
+LINKER_SCRIPT := $(BUILD_SYSTEM)linker_script.ld
+
+
+# grab all the source and header files
+C_FILES := $(foreach sdir,$(SOURCE_DIR),$(wildcard $(sdir)*.c))
+C_FILES += $(foreach sdir,$(BUILD_SYSTEM),$(wildcard $(sdir)*.c))
+SRC_FILES = $(C_FILES)
+SRC_FILES += $(foreach sdir,$(BUILD_SYSTEM),$(wildcard $(sdir)*.S))
+HEADER_FILES = $(foreach sdir,$(HEADERS_DIR),$(wildcard $(sdir)*.h))
+
+# create a list of obj files
+OBJ_FILES = $(subst $(SOURCE_DIR),$(BUILD_DIR),$(SRC_FILES:.c=.o))
+OBJ_FILES := $(subst $(BUILD_SYSTEM),$(BUILD_DIR),$(OBJ_FILES:.S=.o))
+
+# where to look for prerequisites and targets
+.VPATH = $(BUILD_DIR) $(BUILD_SYSTEM) $(SOURCE_DIR)
+
+# Linker and Compiler options
+C_FLAGS := -Wall -std=c11 -Werror -g
+C_FLAGS += -I$(HEADERS_DIR)
+C_FLAGS += -mcpu=cortex-m0 -mthumb -mabi=aapcs -mfloat-abi=soft # CPU Specific compiler flags
+C_FLAGS += -ffunction-sections -fdata-sections --short-enums -fno-strict-aliasing -fno-builtin# Free linker optimizations
+LD_FLAGS := --specs=nosys.specs -Wl,--gc-sections -T $(LINKER_SCRIPT)
+
 
 ifdef DEBUG
 .DEFAULT_GOAL := debug
@@ -18,57 +46,38 @@ else
 endif
 
 
-# Vendor
-SYSTEM_BASE := vendor/build_system/
-LINKER_SCRIPT := $(SYSTEM_BASE)linker_script.ld
-VENDOR_SOURCE := $(foreach sdir,$(SYSTEM_BASE),$(wildcard $(sdir)*.c)) # grab all c source from vendor
-VENDOR_SOURCE += $(foreach sdir,$(SYSTEM_BASE),$(wildcard $(sdir)*.S)) # grab all S source from vendor and append to VENDOR_SOURCE
-VENDOR_OBJECTS := $(VENDOR_SOURCE:.S=.o) # for each item in VENDOR_SOURCE copy to VENDOR_OBJECTS and replace .S with .o
-VENDOR_OBJECTS := $(VENDOR_OBJECTS:.c=.o) # for each item in VENDOR_OBJECTS replace .c with .o
-VENDOR_OBJECTS := $(subst $(SYSTEM_BASE),$(BUILD_DIR),$(VENDOR_OBJECTS)) # for each item in VENDOR_OBJECTS rename SYSTEM_BASE to BUILD_DIR
-
-OBJ_FILES += $(VENDOR_OBJECTS)
-
-# Makefile options
-.VPATH = $(BUILD_DIR) $(SYSTEM_BASE) $(SOURCE_DIR) # where to look for prerequisites and targets
-
-# Compiler
-CC := arm-none-eabi-gcc
-OBJCOPY := arm-none-eabi-objcopy
-
-# Linker and Compiler options
-CFLAGS := -Wall -std=c11 -Werror
-CFLAGS += -I$(HEADERS_DIR)
-CFLAGS += -mcpu=cortex-m0 -mthumb -mabi=aapcs -mfloat-abi=soft # CPU Specific compiler flags
-CFLAGS += -ffunction-sections -fdata-sections --short-enums -fno-strict-aliasing -fno-builtin# Free linker optimizations
-LDFLAGS := --specs=nosys.specs -Wl,--gc-sections -T $(LINKER_SCRIPT)
-
-
 # Rules
 
+# Rule 0: Format code
+.PHONY: format
+format:
+	$(QUIET) indent --linux-style --line-length0 $(C_FILES) $(HEADER_FILES)
+	$(QUIET) rm -rf $(SOURCE_DIR)*.c~ $(HEADERS_DIR)*.h~ $(BUILD_SYSTEM)*~
+
+
 # Rule 1: Create a build directory
-$(BUILD_DIR) :
+$(BUILD_DIR) : format
 	$(QUIET) mkdir -p $@
 
 
 # Rule 2.1: Compile user c source
 $(BUILD_DIR)%.o : $(SOURCE_DIR)%.c | $(BUILD_DIR)
-	$(QUITE) $(CC) $< $(CFLAGS) -c -o $@
+	$(QUIET) $(CC) $< $(C_FLAGS) -c -o $@
 
 
 # Rule 2.2: Compile vendor c files
-$(BUILD_DIR)%.o : $(SYSTEM_BASE)%.c | $(BUILD_DIR)
-	$(QUITE) $(CC) $< $(CFLAGS) -c -o $@
+$(BUILD_DIR)%.o : $(BUILD_SYSTEM)%.c | $(BUILD_DIR)
+	$(QUIET) $(CC) $< $(C_FLAGS) -c -o $@
 
 
 # Rule 2.3: Compile vendor S files
-$(BUILD_DIR)%.o : $(SYSTEM_BASE)%.S | $(BUILD_DIR)
-	$(QUITE) $(CC) $< $(CFLAGS) -c -o $@
+$(BUILD_DIR)%.o : $(BUILD_SYSTEM)%.S | $(BUILD_DIR)
+	$(QUIET) $(CC) $< $(C_FLAGS) -c -o $@
 
 
 # Rule 3: link object files together
-$(BUILD_DIR)output.elf : $(OBJ_FILES) $(VENDOR_OBJECTS)
-	$(QUIET) $(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+$(BUILD_DIR)output.elf : $(OBJ_FILES)
+	$(QUIET) $(CC) $(C_FLAGS) $(LD_FLAGS) $^ -o $@
 
 
 # Rule 4. convert binary into hex file
@@ -92,13 +101,7 @@ erase :
 # Rule 7: Clean repository for build files.
 .PHONY: clean
 clean :
-	$(QUIET) rm -rf $(BUILD_DIR)
-
-
-.PHONY: format
-format: $(SRC_FILES) $(HEADER_FILES)
-	$(QUIET) indent --linux-style --line-length0 $(SRC_FILES) $(HEADER_FILES)
-	$(QUIET) rm -rf $(SOURCE_DIR)*.c~ $(HEADERS_DIR)*.h~
+	$(QUIET) rm -rf $(BUILD_DIR) $(SOURCE_DIR)*~ $(BUILD_SYSTEM)*~
 
 
 .PHONY: connect
@@ -120,19 +123,16 @@ help:
 
 .PHONY: debug
 debug:
-	@echo "VENDOR_SOURCE: "$(VENDOR_SOURCE)
+	@echo "CC: " $(CC)
+	@echo "OBJCOPY: " $(OBJCOPY)
+	@echo "LD_FLAGS: " $(LDFLAGS)
+	@echo "C_FLAGS: " $(C_FLAGS)
+	@echo "TARGET: " $(TARGET)
 	@echo "SOURCE_DIR: " $(SOURCE_DIR)
 	@echo "BUILD_DIR: " $(BUILD_DIR)
 	@echo "HEADERS_DIR: " $(HEADERS_DIR)
 	@echo "SRC_FILES: " $(SRC_FILES)
 	@echo "OBJ_FILES: " $(OBJ_FILES)
 	@echo "HEADER_FILES: " $(HEADER_FILES)
-	@echo "TARGET: " $(TARGET)
-	@echo "SYSTEM_BASE: " $(SYSTEM_BASE)
+	@echo "BUILD_SYSTEM: " $(BUILD_SYSTEM)
 	@echo "LINKER_SCRIPT: " $(LINKER_SCRIPT)
-	@echo "VENDOR_SOURCE: " $(VENDOR_SOURCE)
-	@echo "VENDOR_OBJECTS: " $(VENDOR_OBJECTS)
-	@echo "CC: " $(CC)
-	@echo "OBJCOPY: " $(OBJCOPY)
-	@echo "CFLAGS: " $(CFLAGS)
-	@echo "LDFLAGS: " $(LDFLAGS)
