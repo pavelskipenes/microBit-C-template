@@ -4,7 +4,7 @@ int main()
 {
 	microbit_uart_init();
 	while (1) {
-		microbit_uart_send_message("Epstein didn't kill himself");
+		microbit_uart_send_message("Hello World");
 	}
 	return 0;
 }
