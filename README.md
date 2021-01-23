@@ -1,4 +1,4 @@
-# BBC micro:bit template for C development in VS Code
+# BBC micro:bit C template for VS Code
 Template repository for [BBC micro:bit](https://www.adafruit.com/microbit) development in C with Visual Studio Code. Supports debugging and communication through UART.
 ![](docs/main.png)
 ![](docs/hardware.jpg)
