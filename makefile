@@ -109,6 +109,11 @@ connect:
 	$(QUIET) picocom $(TARGET)
 
 
+.PHONY: openocd
+openocd:
+	$(QUIET) openocd --file=.config/openocd.cfg
+
+
 # Help rule
 .PHONY: help
 help:
