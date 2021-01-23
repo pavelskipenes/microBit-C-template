@@ -68,7 +68,7 @@ make connect
 You should now get output from the micro:bit in the terminal. You can close picocom by pressing `Ctrl+A`, `Ctrl+x`.
 
 ## Debugging
-To be able to debug micro:bit in vscode you need to install Native Debug extension and have openocd server running on your computer.
+To be able to debug micro:bit in vscode you need to install [Native Debug](https://marketplace.visualstudio.com/items?itemName=webfreak.debug) extension and have openocd server running on your computer.
 
 - start openocd server from project root by running:
 ```
