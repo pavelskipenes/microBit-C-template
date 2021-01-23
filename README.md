@@ -1,5 +1,6 @@
 # BBC micro:bit template for C development in VS Code
 Template repository for BBC micro:bit development in C with Visual Studio Code. Supports debugging and communication through UART.
+![](docs/main.png)
 
 ## Setup
 
@@ -62,7 +63,7 @@ make erase
 make flash
 make connect
 ```
-You should now get output from the micro:bit in the terminal. You can close picocom by pressing `Ctrl+A`, `Ctrl+X`.
+You should now get output from the micro:bit in the terminal. You can close picocom by pressing `Ctrl+A`, `Ctrl+x`.
 
 ## Debugging
 To be able to debug micro:bit in vscode you need to install Native Debug extension and have openocd server running on your computer.
