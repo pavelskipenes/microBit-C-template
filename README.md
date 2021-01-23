@@ -1,7 +1,7 @@
 # BBC micro:bit template for C development in VS Code
-Template repository for BBC micro:bit development in C with Visual Studio Code. Supports debugging and communication through UART.
+Template repository for [BBC micro:bit](https://www.adafruit.com/microbit) development in C with Visual Studio Code. Supports debugging and communication through UART.
 ![](docs/main.png)
-
+![](docs/hardware.jpg)
 ## Setup
 
 1. Clone the repo:
@@ -12,7 +12,7 @@ code .
 ```
 2. Install packages:
 ```
-pacman -S arm-none-eabi-gcc arm-none-eabi-gdb openocd picocom 
+pacman -S arm-none-eabi-gcc arm-none-eabi-gdb openocd picocom
 yay -S nrf5x-command-line-tools
 ```
 3. Confirm that you have packages installed and that they are in path by running:
@@ -34,13 +34,15 @@ GNU gdb (GDB) 10.1
 GNU objcopy (GNU Binutils) 2.35.1
 picocom v3.1
 mergehex version: 10.12.1
-nrfjprog version: 10.12.1 
+nrfjprog version: 10.12.1
 JLinkARM.dll version: 6.94a
 Open On-Chip Debugger 0.10.0
 Licensed under GNU GPL v2
 For bug reports, read
 	http://openocd.org/doc/doxygen/bugs.html
 ```
+Optionally install `GNU indent` to format source.
+
 4. Run `sudo dmesg --follow` and connect micro:bit to the computer.
 
 Expected output:
@@ -68,7 +70,7 @@ You should now get output from the micro:bit in the terminal. You can close pico
 ## Debugging
 To be able to debug micro:bit in vscode you need to install Native Debug extension and have openocd server running on your computer.
 
-- start openocd server from project root by running: 
+- start openocd server from project root by running:
 ```
 sudo openocd --file .config/openocd.cfg
 ```
@@ -90,7 +92,7 @@ Info : nrf51.cpu: hardware has 4 breakpoints, 2 watchpoints
 ```
 > Note: You cannot flash micro:bit while openocd server is running due to hardware limitations. You'll need to stop openocd manually each time you want to flash the target.
 
-If you want to avoid typing password when running openocd run this command: 
-``` 
+If you want to avoid typing password when running openocd run this command:
+```
 sudo chmod u+s /usr/bin/openocd
 ```
