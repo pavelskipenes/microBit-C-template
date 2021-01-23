@@ -6,13 +6,18 @@
     "configurations": [
         {
             "type": "gdb",
+            "preLaunchTask": "start openocd",
+            "postDebugTask": "stop openocd",
             "request": "attach",
             "name": "Debug micro:bit",
             "executable": "build/output.elf",
             "target": "localhost:3333",
             "remote": true,
             "cwd": "${workspaceRoot}",
-            "gdbpath": "/usr/bin/arm-none-eabi-gdb"
+            "gdbpath": "/usr/bin/arm-none-eabi-gdb",
+            "autorun": [
+                "interrupt"
+            ]
         }
     ]
 }
