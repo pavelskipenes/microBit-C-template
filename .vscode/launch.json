@@ -16,7 +16,9 @@
             "cwd": "${workspaceRoot}",
             "gdbpath": "/usr/bin/arm-none-eabi-gdb",
             "autorun": [
-                "interrupt"
+                "interrupt",
+                "break main",
+                "monitor reset"
             ]
         }
     ]
