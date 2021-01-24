@@ -13,7 +13,7 @@ BUILD_DIR := build/
 HEADERS_DIR := $(SOURCE_DIR)headers/
 
 # Vendor options
-BUILD_SYSTEM := vendor/build_system/
+BUILD_SYSTEM := vendor/nrf51/
 LINKER_SCRIPT := $(BUILD_SYSTEM)linker_script.ld
 
 
