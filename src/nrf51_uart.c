@@ -1,4 +1,4 @@
-#include "microbit_uart.h"
+#include "nrf51_uart.h"
 #include "nrf51_gpio.h"
 
 #define PIN_TX 24
@@ -25,7 +25,7 @@
 #define UART_DISABLE 0
 #define UART_ENABLE 4
 
-#define UART ((NRF_UART_REG*)0x40002000)
+#define UART ((NRF51_UART_REG*)0x40002000)
 
 #define INPUT 0
 #define OUTPUT 1
@@ -69,9 +69,9 @@ typedef struct {
 	volatile uint32_t BAUDRATE;
 	volatile uint32_t RESERVED10[17];
 	volatile uint32_t CONFIG;
-} NRF_UART_REG;
+} NRF51_UART_REG;
 
-void microbit_uart_init() {
+void nrf51_uart_init() {
 	UART->ENABLE = UART_DISABLE;
 
 	GPIO->PIN_CNF[PIN_TX] = OUTPUT;
@@ -89,7 +89,7 @@ void microbit_uart_init() {
 	UART->STARTRX = 1;
 }
 
-void microbit_uart_send_byte(uint8_t byte) {
+void nrf51_uart_send_byte(uint8_t byte) {
 	// Section 29.4
 	UART->STARTTX = 1;
 	UART->TXD = byte;
@@ -100,18 +100,18 @@ void microbit_uart_send_byte(uint8_t byte) {
 	UART->STOPTX = 1;
 }
 
-void microbit_uart_send_message(const char *message) {
+void nrf51_uart_send_message(const char *message) {
 	int i = 0;
 	while (message[i] != '\0') {
-		microbit_uart_send_byte((uint8_t) message[i]);
+		nrf51_uart_send_byte((uint8_t) message[i]);
 		i++;
 	}
 
-	microbit_uart_send_byte('\n');
-	microbit_uart_send_byte('\r');
+	nrf51_uart_send_byte('\n');
+	nrf51_uart_send_byte('\r');
 }
 
-uint8_t microbit_uart_receive(uint8_t * p_byte) {
+uint8_t nrf51_uart_receive(uint8_t * p_byte) {
 	// Section 29.5
 	if (!UART->RXDRDY)
 		return 0;

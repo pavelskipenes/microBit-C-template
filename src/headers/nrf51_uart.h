@@ -6,21 +6,21 @@
  * that will work for the micro:bit hardware. Must be
  * called before @c uart_send and @c uart_receive are used.
  */
-void microbit_uart_init();
+void nrf51_uart_init();
 
 /**
  * @brief Send a singe byte over the UART interface.
  *
  * @param byte Byte to be sent over UART.
  */
-void microbit_uart_send(uint8_t byte);
+void nrf51_uart_send(uint8_t byte);
 
 /**
  * @brief sends a message over UART
  * 
  * @param const char* 
  */
-void microbit_uart_send_message(const char *message);
+void nrf51_uart_send_message(const char *message);
 
 /**
  * @brief Attempts to receive a single byte over UART.
@@ -35,4 +35,4 @@ void microbit_uart_send_message(const char *message);
  *
  * @return 1 if the UART has received data; 0 otherwise.
  */
-uint8_t microbit_uart_receive(uint8_t * p_byte);
+uint8_t nrf51_uart_receive(uint8_t * p_byte);

@@ -1,4 +1,4 @@
-#include "microbit_uart.h"
+#include "nrf51_uart.h"
 
 int main()
 {
