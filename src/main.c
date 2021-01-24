@@ -1,4 +1,4 @@
-#include "nrf51_uart.h"
+#include "nrf51/uart.h"
 
 int main() {
 	nrf51_uart_init();

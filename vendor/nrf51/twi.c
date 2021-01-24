@@ -1,6 +1,6 @@
-#include "nrf51_twi.h"
-#include "nrf51_gpio.h"
-#include "nrf51_timer.h"
+#include "nrf51/twi.h"
+#include "nrf51/gpio.h"
+#include "nrf51/timer.h"
 
 #define PIN_SCL 0
 #define PIN_SDA 30

@@ -1,5 +1,5 @@
 #include "microbit_button.h"
-#include "nrf51_gpio.h"
+#include "nrf51/gpio.h"
 
 #define BUTTON_A_PIN 17
 #define BUTTON_B_PIN 26

@@ -10,10 +10,13 @@ OBJCOPY := arm-none-eabi-objcopy
 # User source options
 SOURCE_DIR := src/
 BUILD_DIR := build/
+VENDOR_DIR := vendor/
 HEADERS_DIR := $(SOURCE_DIR)headers/
 
+VENDORS := nrf51/
+
 # Vendor options
-BUILD_SYSTEM := vendor/nrf51/
+BUILD_SYSTEM := $(VENDOR_DIR)nrf51/
 LINKER_SCRIPT := $(BUILD_SYSTEM)linker_script.ld
 
 
@@ -33,7 +36,7 @@ OBJ_FILES := $(subst $(BUILD_SYSTEM),$(BUILD_DIR),$(OBJ_FILES:.S=.o))
 
 # Linker and Compiler options
 C_FLAGS := -Wall -std=c11 -Werror -g
-C_FLAGS += -I$(HEADERS_DIR) -I$(BUILD_SYSTEM)
+C_FLAGS += -I$(HEADERS_DIR) -I$(BUILD_SYSTEM) -I$(VENDOR_DIR)
 C_FLAGS += -mcpu=cortex-m0 -mthumb -mabi=aapcs -mfloat-abi=soft # CPU Specific compiler flags
 C_FLAGS += -ffunction-sections -fdata-sections --short-enums -fno-strict-aliasing -fno-builtin# Free linker optimizations
 LD_FLAGS := --specs=nosys.specs -Wl,--gc-sections -T $(LINKER_SCRIPT)
@@ -128,6 +131,8 @@ help:
 .PHONY: debug
 debug:
 	@echo "CC: " $(CC)
+	@echo "VENDORS: " $(VENDORS)
+	@echo "VENDOR_DIR: " $(VENDOR_DIR)
 	@echo "OBJCOPY: " $(OBJCOPY)
 	@echo "LD_FLAGS: " $(LDFLAGS)
 	@echo "C_FLAGS: " $(C_FLAGS)

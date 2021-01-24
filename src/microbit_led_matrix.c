@@ -1,5 +1,5 @@
 #include "microbit_led_matrix.h"
-#include "nrf51_gpio.h"
+#include "nrf51/gpio.h"
 #include <stdint.h>
 
 /* Pins 13, 14, 15 on the micro:bit */

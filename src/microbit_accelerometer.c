@@ -1,5 +1,5 @@
 #include "microbit_accelerometer.h"
-#include "nrf51_twi.h"
+#include "nrf51/twi.h"
 
 #define ACCELEROMETER_ADDRESS 0x19
 
