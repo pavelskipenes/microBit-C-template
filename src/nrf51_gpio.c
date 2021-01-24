@@ -33,8 +33,8 @@ void nrf51_GPIO_direction(int pin_number, bool input) {
 	GPIO->DIRSET = 1 << pin_number;
 }
 
-bool nrf51_GPIO_is_output(int pin_number){
-	return GPIO->DIR & (uint32_t)(1 << pin_number);
+bool nrf51_GPIO_is_output(int pin_number) {
+	return GPIO->DIR & (uint32_t) (1 << pin_number);
 }
 
 // Configuration of GPIO pins

@@ -59,3 +59,27 @@ enum NRF51_GPIO_SENSE {
 	SENSE_HIGH = 2 << ID_E,	// Sense for high level,
 	SENSE_LOW = 3 << ID_E	// Sense for low level
 };
+
+// Write GPIO port
+void nrf51_GPIO_write(int pin_number, bool value);
+
+// Set individual bits in GPIO port
+void nrf51_GPIO_set(int pin_number);
+
+// Clear individual bits in GPIO port
+void nrf51_GPIO_clear(int pin_number);
+
+// Read GPIO port
+bool nrf51_GPIO_read(int32_t pin_number);
+
+// Direction of GPIO pins
+void nrf51_GPIO_direction(int pin_number, bool input);
+
+// Checks if pin is output
+bool nrf51_GPIO_is_output(int pin_number);
+
+// Configuration of GPIO pins
+void nrf51_GPIO_configure(int pin_number, uint32_t configuration);
+
+// Reset configuration of GPIO pin
+void nrf51_GPIO_reset(int pin_number);
