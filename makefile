@@ -51,7 +51,7 @@ endif
 # Rule 0: Format code
 .PHONY: format
 format:
-	$(QUIET) indent --linux-style --line-length0 $(C_FILES) $(HEADER_FILES)
+	$(QUIET) indent --linux-style --line-length0 -brf $(C_FILES) $(HEADER_FILES)
 	$(QUIET) rm -rf $(SOURCE_DIR)*.c~ $(HEADERS_DIR)*.h~ $(BUILD_SYSTEM)*~
 
 

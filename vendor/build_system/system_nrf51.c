@@ -65,13 +65,11 @@ __root uint32_t SystemCoreClock = __SYSTEM_CLOCK;
 uint32_t SystemCoreClock __attribute__((used)) = __SYSTEM_CLOCK;
 #endif
 
-void SystemCoreClockUpdate(void)
-{
+void SystemCoreClockUpdate(void) {
 	SystemCoreClock = __SYSTEM_CLOCK;
 }
 
-void SystemInit(void)
-{
+void SystemInit(void) {
 	/* If desired, switch off the unused RAM to lower consumption by the use of RAMON register.
 	   It can also be done in the application main() function. */
 
@@ -105,8 +103,7 @@ void SystemInit(void)
 	}
 }
 
-static bool is_manual_peripheral_setup_needed(void)
-{
+static bool is_manual_peripheral_setup_needed(void) {
 	if ((((*(uint32_t *) 0xF0000FE0) & 0x000000FF) == 0x1) && (((*(uint32_t *) 0xF0000FE4) & 0x0000000F) == 0x0)) {
 		if ((((*(uint32_t *) 0xF0000FE8) & 0x000000F0) == 0x00) && (((*(uint32_t *) 0xF0000FEC) & 0x000000F0) == 0x0)) {
 			return true;
@@ -122,8 +119,7 @@ static bool is_manual_peripheral_setup_needed(void)
 	return false;
 }
 
-static bool is_disabled_in_debug_needed(void)
-{
+static bool is_disabled_in_debug_needed(void) {
 	if ((((*(uint32_t *) 0xF0000FE0) & 0x000000FF) == 0x1) && (((*(uint32_t *) 0xF0000FE4) & 0x0000000F) == 0x0)) {
 		if ((((*(uint32_t *) 0xF0000FE8) & 0x000000F0) == 0x40) && (((*(uint32_t *) 0xF0000FEC) & 0x000000F0) == 0x0)) {
 			return true;
@@ -133,8 +129,7 @@ static bool is_disabled_in_debug_needed(void)
 	return false;
 }
 
-static bool is_peripheral_domain_setup_needed(void)
-{
+static bool is_peripheral_domain_setup_needed(void) {
 	if ((((*(uint32_t *) 0xF0000FE0) & 0x000000FF) == 0x1) && (((*(uint32_t *) 0xF0000FE4) & 0x0000000F) == 0x0)) {
 		if ((((*(uint32_t *) 0xF0000FE8) & 0x000000F0) == 0xA0) && (((*(uint32_t *) 0xF0000FEC) & 0x000000F0) == 0x0)) {
 			return true;

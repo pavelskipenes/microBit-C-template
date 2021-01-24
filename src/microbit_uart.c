@@ -71,8 +71,7 @@ typedef struct {
 	volatile uint32_t CONFIG;
 } NRF_UART_REG;
 
-void microbit_uart_init()
-{
+void microbit_uart_init() {
 	UART->ENABLE = UART_DISABLE;
 
 	GPIO->PIN_CNF[PIN_TX] = OUTPUT;
@@ -90,8 +89,7 @@ void microbit_uart_init()
 	UART->STARTRX = 1;
 }
 
-void microbit_uart_send_byte(uint8_t byte)
-{
+void microbit_uart_send_byte(uint8_t byte) {
 	// Section 29.4
 	UART->STARTTX = 1;
 	UART->TXD = byte;
@@ -102,8 +100,7 @@ void microbit_uart_send_byte(uint8_t byte)
 	UART->STOPTX = 1;
 }
 
-void microbit_uart_send_message(const char *message)
-{
+void microbit_uart_send_message(const char *message) {
 	int i = 0;
 	while (message[i] != '\0') {
 		microbit_uart_send_byte((uint8_t) message[i]);
@@ -114,8 +111,7 @@ void microbit_uart_send_message(const char *message)
 	microbit_uart_send_byte('\r');
 }
 
-uint8_t microbit_uart_receive(uint8_t * p_byte)
-{
+uint8_t microbit_uart_receive(uint8_t * p_byte) {
 	// Section 29.5
 	if (!UART->RXDRDY)
 		return 0;

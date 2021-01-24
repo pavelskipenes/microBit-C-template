@@ -21,21 +21,18 @@
 #define FIFO_BOOT_NORMAL_MODE 0x00
 #define DISABLE_BOOT_PIN 0x00
 
-static void set_reg(uint8_t reg, uint8_t value)
-{
+static void set_reg(uint8_t reg, uint8_t value) {
 	microbit_twi_write(ACCELEROMETER_ADDRESS, reg, 1, &value);
 }
 
-static void sign_extend_12_bit(int16_t * p_number)
-{
+static void sign_extend_12_bit(int16_t * p_number) {
 	uint16_t *p_raw_data = (uint16_t *) (p_number);
 	if (*p_raw_data & (1 << 11)) {
 		*p_raw_data |= 0xf000;
 	}
 }
 
-void microbit_accelerometer_init()
-{
+void microbit_accelerometer_init() {
 	microbit_twi_init();
 	set_reg(CTRL_REG1_A, ENABLE_XYZ | DATA_RATE_100_HZ);
 	set_reg(CTRL_REG2_A, DISABLE_HIGH_PASS);
@@ -45,8 +42,7 @@ void microbit_accelerometer_init()
 	set_reg(CTRL_REG6_A, DISABLE_BOOT_PIN);
 }
 
-void microbit_accelerometer_read(int16_t * p_x, int16_t * p_y, int16_t * p_z)
-{
+void microbit_accelerometer_read(int16_t * p_x, int16_t * p_y, int16_t * p_z) {
 	uint8_t data[6];
 	microbit_twi_read(ACCELEROMETER_ADDRESS, XYZ_WITH_AUTO_INCREMENT, 6, data);
 

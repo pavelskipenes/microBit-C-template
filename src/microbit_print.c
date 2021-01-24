@@ -1,8 +1,7 @@
 #include "microbit_print.h"
 #include <stdarg.h>
 
-static uint8_t get_minimum_width(const char *l)
-{
+static uint8_t get_minimum_width(const char *l) {
 	uint8_t width = 0;
 	while (*l != 'd' && *l != 'x') {
 		width *= 10;
@@ -12,8 +11,7 @@ static uint8_t get_minimum_width(const char *l)
 	return width;
 }
 
-static uint8_t get_required_width(char radix_format, int32_t number)
-{
+static uint8_t get_required_width(char radix_format, int32_t number) {
 	if (number == 0) {
 		return 1;
 	}
@@ -36,9 +34,8 @@ static uint8_t get_required_width(char radix_format, int32_t number)
 	return width;
 }
 
-static void print_number(void (*put_func)(uint8_t), char radix_format, int32_t number)
-{
-	if(number == 0) {
+static void print_number(void (*put_func)(uint8_t), char radix_format, int32_t number) {
+	if (number == 0) {
 		put_func('0');
 		return;
 	}
@@ -87,8 +84,7 @@ static void print_number(void (*put_func)(uint8_t), char radix_format, int32_t n
 	}
 }
 
-void microbit_print_format(void (*put_func)(uint8_t), const char *format_string, ...)
-{
+void microbit_print_format(void (*put_func)(uint8_t), const char *format_string, ...) {
 	va_list p_arg;
 	va_start(p_arg, format_string);
 

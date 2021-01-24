@@ -60,8 +60,7 @@ typedef struct {
 	volatile uint32_t ADDRESS;
 } NRF_TWI_REG;
 
-static void start_timer(uint32_t frequency)
-{
+static void start_timer(uint32_t frequency) {
 	TIMER1->STOP = 1;
 	TIMER1->CLEAR = 1;
 
@@ -75,18 +74,15 @@ static void start_timer(uint32_t frequency)
 	TIMER1->START = 1;
 }
 
-static void start_watchdog()
-{
+static void start_watchdog() {
 	start_timer(FREQUENCY_2HZ);
 }
 
-static uint8_t watchdog_expired()
-{
+static uint8_t watchdog_expired() {
 	return TIMER1->COMPARE[0];
 }
 
-static void recover_bus_from_halt()
-{
+static void recover_bus_from_halt() {
 	TWI0->ENABLE = 0;
 
 	GPIO->PIN_CNF[PIN_SCL] = 1;
@@ -111,8 +107,7 @@ static void recover_bus_from_halt()
 	microbit_twi_init();
 }
 
-static uint8_t twi_read_with_watchdog(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_read, uint8_t * data_buffer)
-{
+static uint8_t twi_read_with_watchdog(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_read, uint8_t * data_buffer) {
 	TWI0->ADDRESS = slave_address;
 	TWI0->STARTTX = 1;
 
@@ -160,8 +155,7 @@ static uint8_t twi_read_with_watchdog(uint8_t slave_address, uint8_t start_regis
 	return 1;
 }
 
-static uint8_t twi_write_with_watchdog(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_write, uint8_t * data_buffer)
-{
+static uint8_t twi_write_with_watchdog(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_write, uint8_t * data_buffer) {
 	TWI0->ADDRESS = slave_address;
 	TWI0->STARTTX = 1;
 
@@ -190,8 +184,7 @@ static uint8_t twi_write_with_watchdog(uint8_t slave_address, uint8_t start_regi
 	return 1;
 }
 
-void microbit_twi_init()
-{
+void microbit_twi_init() {
 	TWI0->ENABLE = TWI_DISABLE;
 
 	GPIO->PIN_CNF[PIN_SCL] = STANDARD_0_DISCONNECT_1;
@@ -209,8 +202,7 @@ void microbit_twi_init()
 	TWI0->ENABLE = TWI_ENABLE;
 }
 
-void microbit_twi_read(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_read, uint8_t * data_buffer)
-{
+void microbit_twi_read(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_read, uint8_t * data_buffer) {
 	while (1) {
 		uint8_t success = twi_read_with_watchdog(slave_address,
 							 start_register,
@@ -225,8 +217,7 @@ void microbit_twi_read(uint8_t slave_address, uint8_t start_register, uint8_t re
 	}
 }
 
-void microbit_twi_write(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_write, uint8_t * data_buffer)
-{
+void microbit_twi_write(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_write, uint8_t * data_buffer) {
 	while (1) {
 		uint8_t success = twi_write_with_watchdog(slave_address,
 							  start_register,
