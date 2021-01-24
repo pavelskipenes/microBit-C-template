@@ -33,7 +33,7 @@ OBJ_FILES := $(subst $(BUILD_SYSTEM),$(BUILD_DIR),$(OBJ_FILES:.S=.o))
 
 # Linker and Compiler options
 C_FLAGS := -Wall -std=c11 -Werror -g
-C_FLAGS += -I$(HEADERS_DIR)
+C_FLAGS += -I$(HEADERS_DIR) -I$(BUILD_SYSTEM)
 C_FLAGS += -mcpu=cortex-m0 -mthumb -mabi=aapcs -mfloat-abi=soft # CPU Specific compiler flags
 C_FLAGS += -ffunction-sections -fdata-sections --short-enums -fno-strict-aliasing -fno-builtin# Free linker optimizations
 LD_FLAGS := --specs=nosys.specs -Wl,--gc-sections -T $(LINKER_SCRIPT)
