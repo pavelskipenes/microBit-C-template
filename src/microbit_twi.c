@@ -1,5 +1,5 @@
 #include "microbit_twi.h"
-#include "microbit_gpio.h"
+#include "nrf51_gpio.h"
 #include "microbit_timer.h"
 
 #define PIN_SCL 0
