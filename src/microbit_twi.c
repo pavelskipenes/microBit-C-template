@@ -1,6 +1,6 @@
 #include "microbit_twi.h"
 #include "nrf51_gpio.h"
-#include "microbit_timer.h"
+#include "nrf51_timer.h"
 
 #define PIN_SCL 0
 #define PIN_SDA 30
