@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include <stdbool.h>
 
 #define GPIO ((NRF51_GPIO_REG*)0x50000000)
 
