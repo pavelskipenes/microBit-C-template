@@ -1,4 +1,4 @@
-#include "microbit_twi.h"
+#include "nrf51_twi.h"
 #include "nrf51_gpio.h"
 #include "nrf51_timer.h"
 
@@ -15,7 +15,7 @@
 #define FREQUENCY_100HZ 160000
 #define CLEAR_ON_COMPARE0 1
 
-#define TWI0 ((NRF_TWI_REG*)0x40003000)
+#define TWI0 ((NRF51_TWI_REG*)0x40003000)
 
 typedef struct {
 	// Tasks
@@ -58,7 +58,7 @@ typedef struct {
 	volatile uint32_t FREQUENCY;
 	volatile uint32_t RESERVED14[24];
 	volatile uint32_t ADDRESS;
-} NRF_TWI_REG;
+} NRF51_TWI_REG;
 
 static void start_timer(uint32_t frequency) {
 	TIMER1->STOP = 1;
@@ -104,7 +104,7 @@ static void recover_bus_from_halt() {
 
 	TIMER1->STOP = 1;
 
-	microbit_twi_init();
+	nrf51_twi_init();
 }
 
 static uint8_t twi_read_with_watchdog(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_read, uint8_t * data_buffer) {
@@ -184,7 +184,7 @@ static uint8_t twi_write_with_watchdog(uint8_t slave_address, uint8_t start_regi
 	return 1;
 }
 
-void microbit_twi_init() {
+void nrf51_twi_init() {
 	TWI0->ENABLE = TWI_DISABLE;
 
 	GPIO->PIN_CNF[PIN_SCL] = STANDARD_0_DISCONNECT_1;
@@ -202,7 +202,7 @@ void microbit_twi_init() {
 	TWI0->ENABLE = TWI_ENABLE;
 }
 
-void microbit_twi_read(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_read, uint8_t * data_buffer) {
+void nrf51_twi_read(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_read, uint8_t * data_buffer) {
 	while (1) {
 		uint8_t success = twi_read_with_watchdog(slave_address,
 							 start_register,
@@ -217,7 +217,7 @@ void microbit_twi_read(uint8_t slave_address, uint8_t start_register, uint8_t re
 	}
 }
 
-void microbit_twi_write(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_write, uint8_t * data_buffer) {
+void nrf51_twi_write(uint8_t slave_address, uint8_t start_register, uint8_t registers_to_write, uint8_t * data_buffer) {
 	while (1) {
 		uint8_t success = twi_write_with_watchdog(slave_address,
 							  start_register,
