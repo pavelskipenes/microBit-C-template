@@ -1,5 +1,5 @@
-#include "nrf51/uart.h"
-#include "nrf51/gpio.h"
+#include "uart.h"
+#include "gpio.h"
 
 #define PIN_TX 24
 #define PIN_RX 25

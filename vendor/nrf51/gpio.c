@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include <stdint.h>
-#include "nrf51/gpio.h"
+#include "gpio.h"
 
 // Write GPIO port
 void nrf51_GPIO_write(int pin_number, bool value) {
